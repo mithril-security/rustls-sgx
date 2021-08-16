@@ -1,9 +1,17 @@
 use std::env;
-use std::fs::{File, OpenOptions};
 use std::io;
 use std::io::Write;
 use std::path::Path;
+
+#[cfg(not(target_env = "sgx"))]
 use std::sync::Mutex;
+#[cfg(not(target_env = "sgx"))]
+use std::fs::{File, OpenOptions};
+
+#[cfg(target_env = "sgx")]
+use std::sync::SgxMutex as Mutex;
+#[cfg(target_env = "sgx")]
+use std::untrusted::fs::{File, OpenOptions};
 
 #[cfg(feature = "logging")]
 use crate::log::warn;

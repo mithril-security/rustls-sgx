@@ -3,8 +3,14 @@ use crate::server::ProducesTickets;
 
 use ring::aead;
 use std::mem;
-use std::sync::{Arc, Mutex};
 use std::time;
+
+use std::sync::Arc;
+#[cfg(not(target_env = "sgx"))]
+use std::sync::Mutex;
+
+#[cfg(target_env = "sgx")]
+use std::sync::SgxMutex as Mutex;
 
 /// The timebase for expiring and rolling tickets and ticketing
 /// keys.  This is UNIX wall time in seconds.

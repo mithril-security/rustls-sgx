@@ -5,7 +5,13 @@ use crate::msgs::enums::SignatureScheme;
 use crate::sign;
 
 use std::collections;
-use std::sync::{Arc, Mutex};
+
+use std::sync::Arc;
+#[cfg(not(target_env = "sgx"))]
+use std::sync::Mutex;
+
+#[cfg(target_env = "sgx")]
+use std::sync::SgxMutex as Mutex;
 
 /// An implementor of `StoresClientSessions` which does nothing.
 pub struct NoClientSessionStorage {}
